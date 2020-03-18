@@ -47,9 +47,13 @@ services:
       DOMAIN: 'bmapi.docker.localhost'
       DEBUG_MODE: 'True'
       RABBITMQ_HOST: 'rabbit1'
+      RABBITMQ_USERNAME: 'rabbitmq'
+      RABBITMQ_PASSWORD: 'rabbitmq'
       RABBITMQ_ROUTINGKEY: 'eSports-routing-key'
       RABBITMQ_EXCHANGE: 'eSports-exchange'
       RABBITMQ_QUEUE: 'eSports-queue'
+      ELASTICSEARCH_INDEX: 'eSports-queue'
+      ELASTICSEARCH_HOST: 'elasticsearch'
     volumes:
       - ./bayes-management-api:/app
     expose:

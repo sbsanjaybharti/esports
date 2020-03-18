@@ -1,6 +1,7 @@
 from datetime import datetime
 from elasticsearch_dsl import Document, Date, Integer, Keyword, Text
 
+from ..config import Config as config
 
 class ElasticSearchConfig(Document):
     title = Text(analyzer='snowball', fields={'raw': Keyword()})
@@ -10,7 +11,7 @@ class ElasticSearchConfig(Document):
     lines = Integer()
 
     class Index:
-        name = 'sports2'
+        name = config.ELASTICSEARCH_INDEX
         settings = {
           "number_of_shards": 2,
         }

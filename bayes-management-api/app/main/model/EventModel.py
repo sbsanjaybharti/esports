@@ -3,6 +3,7 @@ import uuid
 from .TournamentModel import Tournament
 from elasticsearch_dsl.connections import connections
 from ..utility.elasticSearchConnection import ElasticSearchConfig
+from ..config import Config as config
 
 
 class Event(db.Model):
@@ -33,7 +34,7 @@ class EventState(db.Model):
     date_start_text = db.Column(db.DateTime, nullable=True)
 
     def storeSearch(self):
-        connections.create_connection(hosts=['elasticsearch'])
+        connections.create_connection(hosts=[config.ELASTICSEARCH_HOST])
         ElasticSearchConfig.init()
 
         post = ElasticSearchConfig(meta={'id': self.id}, title=self.event.title,

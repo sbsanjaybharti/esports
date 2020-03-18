@@ -10,8 +10,8 @@ class RabbitMq():
 
     def __init__(self):
         """ Configure Rabbit Mq Server  """
-        credentials = pika.PlainCredentials('rabbitmq', 'rabbitmq')
-        parameters = pika.ConnectionParameters('rabbit1', 5672, '/', credentials)
+        credentials = pika.PlainCredentials(config.RABBITMQ_USERNAME, config.RABBITMQ_PASSWORD)
+        parameters = pika.ConnectionParameters(config.RABBITMQ_HOST, 5672, '/', credentials)
         self._connection = pika.BlockingConnection(parameters)
         self._channel = self._connection.channel()
         self._channel.queue_declare(queue=config.RABBITMQ_QUEUE)

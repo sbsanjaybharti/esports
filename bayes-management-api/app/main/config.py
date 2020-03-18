@@ -32,9 +32,15 @@ class Config:
     RabbitMQ connection variable
     """
     RABBITMQ_HOST = os.getenv('RABBITMQ_HOST')
+    RABBITMQ_USERNAME: os.getenv('RABBITMQ_USERNAME')
+    RABBITMQ_PASSWORD: os.getenv('RABBITMQ_PASSWORD')
     RABBITMQ_ROUTINGKEY = os.getenv('RABBITMQ_ROUTINGKEY')
     RABBITMQ_EXCHANGE = os.getenv('RABBITMQ_EXCHANGE')
     RABBITMQ_QUEUE = os.getenv('RABBITMQ_QUEUE')
+
+
+    ELASTICSEARCH_INDEX = os.getenv('ELASTICSEARCH_INDEX')
+    ELASTICSEARCH_HOST = os.getenv('ELASTICSEARCH_HOST')
 
 
 class DevelopmentConfig(Config):

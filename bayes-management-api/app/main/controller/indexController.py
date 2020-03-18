@@ -6,6 +6,7 @@ from ..service.EventService import EventService
 from ..utility.responseHandler import responseData
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
+from ..config import Config as config
 
 api = IndexDto.api
 
@@ -53,7 +54,7 @@ class search(Resource):
     def get(self):
         args = request.args
         print(args['search'])
-        client = Elasticsearch('elasticsearch')
+        client = Elasticsearch(config.ELASTICSEARCH_HOST)
 
         s = Search(using=client, index="sports2")
 
