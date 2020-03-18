@@ -1,14 +1,5 @@
-import logging
-import pika
-import ast
-
-import json
-from collections import namedtuple
 from datetime import datetime
 from elasticsearch_dsl import Document, Date, Integer, Keyword, Text
-from elasticsearch_dsl.connections import connections
-
-from ..config import Config as config
 
 
 class ElasticSearchConfig(Document):
@@ -19,7 +10,7 @@ class ElasticSearchConfig(Document):
     lines = Integer()
 
     class Index:
-        name = 'sports1'
+        name = 'sports2'
         settings = {
           "number_of_shards": 2,
         }
@@ -30,19 +21,3 @@ class ElasticSearchConfig(Document):
 
     def is_published(self):
         return datetime.now() >= self.published_from
-
-# class ElasticData(object):
-#
-#     def __init__(self, id, title, body, tags):
-#         self.id = id
-#         self.title = title
-#         self.body = body
-#         self.tags = tags
-#
-#     def set(self):
-#
-#         ElasticSearch.init()
-#         post = ElasticSearch(meta={'id': self.id}, title=self.title, tags=self.tags)
-#         post.body = self.body
-#         post.published_from = datetime.now()
-#         post.save()

@@ -1,6 +1,3 @@
-import datetime
-
-from app.main import db
 from ..model.TeamModel import Team
 
 

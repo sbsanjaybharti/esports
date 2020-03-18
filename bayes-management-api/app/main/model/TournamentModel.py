@@ -1,6 +1,4 @@
-from .. import db, flask_bcrypt
-import uuid
-import datetime
+from .. import db
 
 
 class Tournament(db.Model):

@@ -1,17 +1,14 @@
 from .. import db, flask_bcrypt
 import uuid
-import datetime
 from .TournamentModel import Tournament
-# from .ScoreModel import Score
 from elasticsearch_dsl.connections import connections
 from ..utility.elasticSearchConnection import ElasticSearchConfig
 
 
-# Define the UserRoles association table
 class Event(db.Model):
     __tablename__ = 'events'
 
-    # id = db.Column(db.Integer(), primary_key=True)
+
     id = db.Column(db.String(100), primary_key=True, autoincrement=False, unique=True, default=str(uuid.uuid4()))
     title = db.Column(db.String(100), index=True)
     source = db.Column(db.String(500), index=True)
@@ -22,7 +19,6 @@ class Event(db.Model):
         db.session.commit()
 
 
-# Define the UserRoles association table
 class EventState(db.Model):
     __tablename__ = 'event_state'
 

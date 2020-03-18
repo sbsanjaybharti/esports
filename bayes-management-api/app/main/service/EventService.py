@@ -1,6 +1,3 @@
-import datetime
-
-from app.main import db
 from flask import current_app
 from ..model.EventModel import Event, EventState
 from ..model.TournamentModel import Tournament
@@ -8,6 +5,7 @@ from ..service.TournamentService import TournamentService
 from ..service.TeamService import TeamService
 from ..service.ScoreService import ScoreService
 from ..utility.responseHandler import getException
+
 class EventService:
 
     def set(data, source):

@@ -1,12 +1,5 @@
-import datetime
 import uuid
-import sys
-from app.main import db
 from ..model.ScoreModel import Score
-from ..service.TeamService import TeamService
-from ..model.TeamModel import Team
-from ..model.TournamentModel import Tournament
-import linecache
 
 
 class ScoreService:

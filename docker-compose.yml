@@ -1,0 +1,136 @@
+version: '3'
+services:
+  # ##################
+  # Traefik
+  # ##################
+  traefik:
+    image: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+      - "8001:8001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
+
+  bmapi:
+    build: ./nginx
+    environment:
+      APP_HOST_NAME: 'bayes-management-api'
+      APP_HOST_PORT: 8001
+    container_name: bmapi_nginx
+    restart: always
+    depends_on:
+      - bayes-management-api
+    labels:
+      - "traefik.backend=bmapi"
+      - "traefik.frontend.rule=Host:bmapi.docker.localhost"
+      - "traefik.port=9000"
+      - "traefik.enable=true"
+
+  # ##################
+  # Bayes management System Application
+  # ##################
+  bayes-management-api:
+    build:
+      context: ./bayes-management-api
+      dockerfile: local.Dockerfile
+    environment:
+      APP_NAME: 'BayesManagementAPI'
+      FLASK_CONFIG: 'development'
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: bayes_management
+      DB_USER: root
+      DB_PASSWORD: example
+      DOMAIN: 'bmapi.docker.localhost'
+      DEBUG_MODE: 'True'
+      RABBITMQ_HOST: 'rabbit1'
+      RABBITMQ_ROUTINGKEY: 'eSports-routing-key'
+      RABBITMQ_EXCHANGE: 'eSports-exchange'
+      RABBITMQ_QUEUE: 'eSports-queue'
+    volumes:
+      - ./bayes-management-api:/app
+    expose:
+      - 8001
+    depends_on:
+      - mysql
+      - rabbit1
+    labels:
+      - "traefik.backend=bayes-management-api"
+      - "traefik.frontend.rule=Host:bayes-management-api.docker.localhost"
+      - "traefik.port=8001"
+      - "traefik.enable=true"
+
+  # ##################
+  # Mysql Database
+  # ##################
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql_database:/var/lib/mysql
+      - ./mysql_dumps:/dumps
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+
+  # ##################
+  # phpMyAdmin
+  # ##################
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    labels:
+      - "traefik.backend=phpmyadmin"
+      - "traefik.frontend.rule=Host:phpmyadmin.docker.localhost"
+      - "traefik.port=80"
+      - "traefik.enable=true"
+    depends_on:
+      - mysql
+
+  # ##################
+  # ElasticSearch server
+  # ##################
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+      dockerfile: local.Dockerfile
+    hostname: "elasticsearch"
+    environment:
+      DEFAULT__HOST: ""
+    ports:
+      - "9200:9200"
+    labels:
+      - "traefik.backend=elasticsearch"
+      - "traefik.frontend.rule=Host:elasticsearch.docker.localhost"
+      - "traefik.port=9200"
+      - "traefik.enable=true"
+
+  # ##################
+  # Rabbit MQ server
+  # ##################
+  rabbit1:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit1"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      - "traefik.backend=rabbit"
+      - "traefik.frontend.rule=Host:rabbit.docker.localhost"
+      - "traefik.port=15672"
+      - "traefik.enable=true"
+    volumes:
+      - "./rabbit/enabled_plugins:/etc/rabbitmq/enabled_plugins"
+      #- "./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro"
+      #- "./autocluster-0.4.1.ez:/usr/lib/rabbitmq/lib/rabbitmq_server-3.5.5/plugins/autocluster-0.4.1.ez"
+
+volumes:
+  mysql_database:

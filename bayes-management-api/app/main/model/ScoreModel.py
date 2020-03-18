@@ -1,4 +1,4 @@
-from .. import db, flask_bcrypt
+from .. import db
 import uuid
 from .TeamModel import Team
 from .EventModel import EventState

@@ -1,0 +1,15 @@
+git *__pycache__/*
+*__pycache__*
+frontend-management/app/__pycache__/*
+frontend-management/app/main/controller/__pycache__/*
+frontend-management/app/main/dto/__pycache__/*
+frontend-management/app/main/service/__pycache__/*
+frontend-management/migrations/__pycache__/*
+frontend-management/migrations/versions/*
+
+task-management-api/app/__pycache__/*
+task-management-api/app/main/controller/__pycache__/*
+task-management-api/app/main/dto/__pycache__/*
+task-management-api/app/main/service/__pycache__/*
+task-management-api/migrations/__pycache__/*
+task-management-api/migrations/versions/*

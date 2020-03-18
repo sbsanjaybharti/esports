@@ -6,9 +6,6 @@ from ..service.EventService import EventService
 from ..utility.responseHandler import responseData
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-from elasticsearch_dsl.connections import connections
-
-from datetime import datetime
 
 api = IndexDto.api
 
@@ -41,13 +38,6 @@ class list(Resource):
 
         args = request.args
         return responseData(EventService.list(args))
-    # def view(self):
-    #
-    #     args = request.args
-    #     # print(args)
-    #     # list = EventService(args)
-    #
-    #     return responseData(EventService.list(args))
 
 @api.route('/view/<id>')
 class view(Resource):
@@ -65,16 +55,14 @@ class search(Resource):
         print(args['search'])
         client = Elasticsearch('elasticsearch')
 
-        s = Search(using=client, index="sports1")
+        s = Search(using=client, index="sports2")
 
         # Search grater than date
         if 'date_start__gte' in args and args['date_start__gte'] is not None:
             s = s.filter('range', published_from={'gte': args['date_start__gte'], 'lte': args['date_start__lte']})
 
-        s =s.query("match", title=args['search'])
+        s = s.query('multi_match', fields=[ "title", "body" ], query=args['search'], type='phrase_prefix')
 
-        # s.aggs.bucket('per_tag', 'terms', field='tags') \
-        #     .metric('max_lines', 'max', field='lines')
         response = s.execute()
         response = response.to_dict()
 
