@@ -36,13 +36,14 @@ class list(Resource):
                      'date_start__gte': 'YYYY-MM-DD',
                      'date_start__lte': 'YYYY-MM-DD'})
     def get(self):
-
+        """List all the tournament and provide python search"""
         args = request.args
         return responseData(EventService.list(args))
 
 @api.route('/view/<id>')
 class view(Resource):
     def get(self, id):
+        """Detail of each Match by ID"""
         return responseData(EventService.view(id))
 
 
@@ -52,6 +53,7 @@ class search(Resource):
                      'date_start__gte': 'YYYY-MM-DD',
                      'date_start__lte': 'YYYY-MM-DD'})
     def get(self):
+        """Display tournament by Elastic search"""
         args = request.args
         print(args['search'])
         client = Elasticsearch(config.ELASTICSEARCH_HOST)
